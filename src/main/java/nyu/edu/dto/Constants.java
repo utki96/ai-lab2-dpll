@@ -7,5 +7,6 @@ public class Constants {
     public static final String NODES_START_DELIM = "[";
     public static final String NODES_END_DELIM = "]";
     public static final String NODES_DELIM = ",";
-    public static final int DEFAULT_ASSIGNMENT = 1;
+    public static final String ATOM_DELIMITER = "_";
+    public static final Boolean DEFAULT_ASSIGNMENT = false;
 }

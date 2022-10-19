@@ -3,86 +3,90 @@ package nyu.edu;
 import nyu.edu.dto.Atom;
 import nyu.edu.dto.Clause;
 import nyu.edu.dto.Constants;
+import nyu.edu.dto.Pair;
 
 import java.util.*;
 
 public class DPLLSolver {
 
-    private int nColors;
+    private boolean isVerbose;
 
-    public DPLLSolver(int nColors) {
-        this.nColors = nColors;
+    public DPLLSolver(boolean isVerbose) {
+        this.isVerbose = isVerbose;
     }
 
-    public Map<String, Integer> dpll(List<Clause> clauses, Set<String> atoms) {
-        Map<String, Integer> assignments = new HashMap<>();
-        if (DPLLSolverUtil(atoms, assignments, clauses)) {
-            return assignments;
+    public Map<String, Boolean> dpll(Set<String> atoms, List<Clause> clauses) {
+        if (isVerbose) {
+            System.out.println(new String(new char[50]).replace("\0", "-"));
+            System.out.println("SOLUTION STEPS: ");
         }
-        return null;
+        Map<String, Boolean> assignments = new HashMap<>(), finalResMap = DPLLSolverUtil(atoms, assignments, clauses);
+        return finalResMap;
     }
 
-    private boolean DPLLSolverUtil(Set<String> atoms, Map<String, Integer> assignments, List<Clause> clauses) {
-        ClauseGenerator.printClauses(clauses);
-
-        if (clauses.isEmpty()) {        // Success: All clauses are satisfied
-            assignDefaultValues(atoms, assignments);
-            return true;
-        }
-        if (checkEmptyClause(clauses)) {
-            return false;
-        }
-
-        // EASY CASES: SINGLE LITERAL and PURE LITERAL ELIMINATION
-        Atom singleAtom = getSingleLiteral(clauses);
-        if (singleAtom != null) {
-            System.out.println("SINGLE ATOM: " + singleAtom.getLabel() + " -> " + singleAtom.getColor());
-            atoms.remove(singleAtom.getLabel());
-            assignments.put(singleAtom.getLabel(), singleAtom.getColor());
-            propagate(singleAtom, clauses);
-            if (DPLLSolverUtil(atoms, assignments, clauses)) {
-                return true;
-            } else {
-                atoms.add(singleAtom.getLabel());
-                assignments.remove(singleAtom.getLabel());
-                return false;
+    private Map<String, Boolean> DPLLSolverUtil(Set<String> atoms, Map<String, Boolean> assignments, List<Clause> clauses) {
+        boolean tryEasyCases = true;
+        while(tryEasyCases) {
+            if (clauses.isEmpty()) {        // Success: All clauses are satisfied
+                assignDefaultValues(atoms, assignments);
+                return assignments;
             }
-        }
-        Atom pureAtom = getPureLiteral(atoms, clauses);
-        if (pureAtom != null) {
-            System.out.println("PURE ATOM: " + pureAtom.getLabel() + " -> " + pureAtom.getColor());
-            atoms.remove(pureAtom.getLabel());
-            assignments.put(pureAtom.getLabel(), pureAtom.getColor());
-            propagate(pureAtom, clauses);
-            if (DPLLSolverUtil(atoms, assignments, clauses)) {
-                return true;
-            } else {
-                atoms.add(pureAtom.getLabel());
-                assignments.remove(pureAtom.getLabel());
-                return false;
-            }
-        }
-
-        // GUESS all colours sequentially for a particular atom
-        Set<String> guessSet = new HashSet<>(atoms);
-        String atomGuess = guessSet.iterator().next();
-        for (int color = 1; color <= nColors; color++) {
-            if (isColorAssignmentForAtom(atomGuess, color, clauses)) {
-                System.out.println("GUESSING: " + atomGuess + " -> " + color);
-                List<Clause> clausesCopy = Util.copyClauses(clauses);
-                Atom guessAtom = new Atom(atomGuess, color, false);
-                atoms.remove(atomGuess);
-                assignments.put(atomGuess, color);
-                propagate(guessAtom, clausesCopy);
-                if (DPLLSolverUtil(atoms, assignments, clausesCopy)) {
-                    return true;
-                } else {
-                    atoms.add(atomGuess);
-                    assignments.remove(atomGuess);
+            if (checkEmptyClause(clauses)) {
+                if (isVerbose) {
+                    System.out.println("contradiction: backtracking to last guess");
                 }
+                return null;
+            }
+
+            // EASY CASES: SINGLE LITERAL and PURE LITERAL ELIMINATION
+            Atom easyCaseAtom = getSingleLiteral(clauses);
+            boolean unitLiteral = true;
+            if (easyCaseAtom == null) {
+                unitLiteral = false;
+                easyCaseAtom = getPureLiteral(clauses);
+            }
+            if (easyCaseAtom != null) {
+                if (isVerbose && unitLiteral) {
+                    System.out.println("easy case: unit literal " + easyCaseAtom.getLabel() + " -> " + ! easyCaseAtom.isNot());
+                } else if (isVerbose){
+                    System.out.println("easy case: pure literal " + easyCaseAtom.getLabel() + " -> " + ! easyCaseAtom.isNot());
+                }
+                atoms.remove(easyCaseAtom.getLabel());
+                assignments.put(easyCaseAtom.getLabel(), ! easyCaseAtom.isNot());
+                propagate(easyCaseAtom, clauses);
+            } else {
+                tryEasyCases = false;
             }
         }
-        return false;
+
+        // GUESS value for the first atom in the set
+        List<String> guessList = new ArrayList<>(atoms);
+        Collections.sort(guessList);
+        String atomGuess = guessList.get(0);
+        List<Clause> clausesCopy = Util.copyClauses(clauses);
+        Set<String> atomsCopy = Util.copySet(atoms);
+        Map<String, Boolean> assignmentCopy = Util.copyAssignmentMap(assignments);
+
+        if (isVerbose) {
+            System.out.println("hard case: guessing " + atomGuess + " -> true");
+        }
+        Atom guessAtom = new Atom(atomGuess, false);    // Guessing true first
+        atoms.remove(atomGuess);
+        assignments.put(atomGuess, true);
+        propagate(guessAtom, clauses);
+
+        Map<String, Boolean> finalResMap = DPLLSolverUtil(atoms, assignments, clauses);
+        if (finalResMap != null) {
+            return finalResMap;
+        }
+        if (isVerbose) {
+            System.out.println("hard case: guessing " + atomGuess + " -> false");
+        }
+        guessAtom = new Atom(atomGuess, true);         // Guessing false now
+        atomsCopy.remove(atomGuess);
+        assignmentCopy.put(atomGuess, false);
+        propagate(guessAtom, clausesCopy);
+        return DPLLSolverUtil(atomsCopy, assignmentCopy, clausesCopy);
     }
 
     private void propagate(Atom propagateAtom, List<Clause> clauses) {
@@ -91,16 +95,8 @@ public class DPLLSolver {
             List<Atom> atomToRemove = new ArrayList<>();
             boolean removeClause = false;
             for (Atom atom : clause.getAtoms()) {
-                if (atom.getLabel().equalsIgnoreCase(propagateAtom.getLabel()) && atom.getColor() == propagateAtom.getColor()) {
-                    if (atom.isNot()) {
-                        atomToRemove.add(atom);
-                    } else {
-                        removeClause = true;
-                        clausesToRemove.add(clause);
-                        break;
-                    }
-                } else if (atom.getLabel().equalsIgnoreCase(propagateAtom.getLabel()) && atom.getColor() != propagateAtom.getColor()) {
-                    if (atom.isNot()) {
+                if (atom.getLabel().equalsIgnoreCase(propagateAtom.getLabel())) {
+                    if (atom.isNot() == propagateAtom.isNot()) {
                         removeClause = true;
                         clausesToRemove.add(clause);
                         break;
@@ -116,58 +112,27 @@ public class DPLLSolver {
         clauses.removeAll(clausesToRemove);
     }
 
-    private boolean isColorAssignmentForAtom(String atomGuess, int color, List<Clause> clauses) {
+    private Atom getPureLiteral(List<Clause> clauses) {
+        // Map -> { atomLabel : Pair(positive count, negative count) }
+        Map<String, Pair<Integer, Integer>> atomCountMap = new HashMap<>();
         for (Clause clause : clauses) {
             for (Atom atom : clause.getAtoms()) {
-                if (atom.getLabel().equalsIgnoreCase(atomGuess) && atom.getColor() == color && ! atom.isNot()) {
-                    return true;
+                Pair<Integer, Integer> countPair = atomCountMap.getOrDefault(atom.getLabel(), new Pair<>(0, 0));
+                if (atom.isNot()) {
+                    countPair.setRight(countPair.getRight() + 1);
+                } else {
+                    countPair.setLeft(countPair.getLeft() + 1);
                 }
+                atomCountMap.put(atom.getLabel(), countPair);
             }
         }
-        return false;
-    }
-
-    private Atom getPureLiteral(Set<String> atomLabels, List<Clause> clauses) {
-        for (String atomLabel : atomLabels) {
-            boolean shortCircuit = false;
-            int[] positiveCounts = new int[nColors], negativeCounts = new int[nColors];
-            for (int i = 0; i < nColors; i++) {
-                positiveCounts[i] = 0;
-                negativeCounts[i] = 0;
+        for (String key : atomCountMap.keySet()) {
+            Pair<Integer, Integer> countPair = atomCountMap.get(key);
+            if (countPair.getLeft() == 1 && countPair.getRight() == 0) {
+                return new Atom(key, false);
             }
-            for (Clause clause : clauses) {
-                if (shortCircuit) {
-                    break;
-                }
-                for (Atom atom : clause.getAtoms()) {
-                    if (atom.getLabel().equalsIgnoreCase(atomLabel)) {
-                        if (atom.isNot()) {
-                            negativeCounts[atom.getColor() - 1]++;
-                            if (positiveCounts[atom.getColor() - 1] > 0) {
-                                shortCircuit = true;
-                                break;
-                            }
-                        } else {
-                            positiveCounts[atom.getColor() - 1]++;
-                            if (negativeCounts[atom.getColor() - 1] > 0) {
-                                shortCircuit = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            if (! shortCircuit) {
-                int c = 0, color = 0;
-                for (int i = 0; i < nColors; i++) {
-                    if (positiveCounts[i] > 0 || negativeCounts[i] > 0) {
-                        color = i+1;
-                        c++;
-                    }
-                }
-                if (c == 1) {
-                    return new Atom(atomLabel, color, false);
-                }
+            if (countPair.getRight() == 1 && countPair.getLeft() == 0) {
+                return new Atom(key, true);
             }
         }
         return null;
@@ -175,7 +140,7 @@ public class DPLLSolver {
 
     private Atom getSingleLiteral(List<Clause> clauses) {
         for (Clause clause : clauses) {
-            if (clause.getAtoms().size() == 1 && ! clause.getAtoms().get(0).isNot()) {
+            if (clause.getAtoms().size() == 1) {
                 return clause.getAtoms().get(0);
             }
         }
@@ -191,7 +156,7 @@ public class DPLLSolver {
         return false;
     }
 
-    private void assignDefaultValues(Set<String> atoms, Map<String, Integer> assignments) {
+    private void assignDefaultValues(Set<String> atoms, Map<String, Boolean> assignments) {
         for (String atomLabel : atoms) {
             assignments.put(atomLabel, Constants.DEFAULT_ASSIGNMENT);
         }

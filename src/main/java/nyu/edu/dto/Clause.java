@@ -20,7 +20,7 @@ public class Clause {
         int c = 0;
         for (Atom atom : this.atoms) {
             if (c > 0) {
-                strVal.append(" OR ");
+                strVal.append(" | ");
             }
             strVal.append(atom.toString());
             c++;

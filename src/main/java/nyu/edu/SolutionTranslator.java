@@ -1,30 +1,32 @@
 package nyu.edu;
 
-import java.util.HashMap;
+import nyu.edu.dto.Constants;
+
+import java.util.List;
 import java.util.Map;
 
 public class SolutionTranslator {
 
-    private Map<String, String> convertBack(Map<String, Integer> assignments) {
-        if (assignments == null || assignments.keySet().size() == 0) {
-            return null;
-        }
-        Map<String, String> solution = new HashMap<>();
-        for (String key : assignments.keySet()) {
-            solution.put(key, Util.colorGenerator(assignments.get(key)));
-        }
-        return solution;
+    private int nColors;
+
+    public SolutionTranslator(int nColors) {
+        this.nColors = nColors;
     }
 
-    public void printSolution(Map<String, Integer> assignments) {
-        Map<String, String> solution = convertBack(assignments);
-        System.out.println("-".repeat(75));
-        if (solution == null) {
-            System.out.println("NO Solution");
-        } else {
-            System.out.println("Final Assignments:");
-            for (String key : solution.keySet()) {
-                System.out.println(key + " = " + solution.get(key));
+    public void convertBack(List<String> labels, Map<String, Boolean> assignments) {
+        System.out.println(new String(new char[75]).replace("\0", "-"));
+        if (assignments == null || assignments.isEmpty()) {
+            System.out.println("NO VALID ASSIGNMENT");
+            return;
+        }
+        System.out.println("FINAL SOLUTION:");
+        for (String label : labels) {
+            for (int i = 1; i <= nColors; i++) {
+                String atomLabel = label + Constants.ATOM_DELIMITER + Util.colorGenerator(i);
+                if (assignments.containsKey(atomLabel) && assignments.get(atomLabel)) {
+                    System.out.println(label + " = " + Util.colorGenerator(i));
+                    break;
+                }
             }
         }
     }

@@ -15,20 +15,7 @@ public class InputParser {
         for (String instruction : instructions) {
             processInputLine(instruction, graph);
         }
-        printGraph(graph);
         return graph;
-    }
-
-    private void printGraph(Map<String, Set<String>> graph) {
-        List<String> labels = new ArrayList<>(graph.keySet());
-        Collections.sort(labels);
-        for (String label : labels) {
-            System.out.print(label + " -> ");
-            for (String neighbor : graph.get(label)) {
-                System.out.print(neighbor + ", ");
-            }
-            System.out.println();
-        }
     }
 
     private void processInputLine(String instruction, Map<String, Set<String>> graph) throws RuntimeException {
@@ -52,7 +39,7 @@ public class InputParser {
         Set<String> parentChildren = graph.getOrDefault(parentLabel, new HashSet<>());
         for (String neighborLabel : neighbors) {
             neighborLabel = neighborLabel.trim();
-            if (! neighborLabel.isBlank()) {
+            if (! neighborLabel.isEmpty()) {
                 Set<String> neighborChildren = graph.getOrDefault(neighborLabel, new HashSet<>());
                 parentChildren.add(neighborLabel);
                 neighborChildren.add(parentLabel);
@@ -68,8 +55,9 @@ public class InputParser {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line = br.readLine();
             while (line != null) {
-                if (! (line.startsWith(Constants.COMMENT_LINE) || line.isBlank())) {
-                    instructions.add(line.trim());
+                line = line.trim();
+                if (! (line.startsWith(Constants.COMMENT_LINE) || line.isEmpty())) {
+                    instructions.add(line);
                 }
                 line = br.readLine();
             }

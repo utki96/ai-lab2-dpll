@@ -5,26 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5fe76b68-8d07-4475-ac19-1ed0bae67577" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/nyu/edu/ClauseGenerator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/nyu/edu/DPLLSolver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/nyu/edu/InputParser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/nyu/edu/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/nyu/edu/SolutionTranslator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/nyu/edu/Util.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/nyu/edu/dto/Assignment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/nyu/edu/dto/Atom.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/nyu/edu/dto/Clause.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/nyu/edu/dto/Constants.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nyu/edu/dto/Pair.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nyu/edu/ClauseGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nyu/edu/ClauseGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nyu/edu/DPLLSolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nyu/edu/DPLLSolver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nyu/edu/InputParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nyu/edu/InputParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nyu/edu/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nyu/edu/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nyu/edu/SolutionTranslator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nyu/edu/SolutionTranslator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nyu/edu/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nyu/edu/Util.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nyu/edu/dto/Atom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nyu/edu/dto/Atom.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nyu/edu/dto/Clause.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nyu/edu/dto/Clause.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nyu/edu/dto/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nyu/edu/dto/Constants.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +59,10 @@
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm"
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Problems",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2"
   }
 }]]></component>
   <component name="RunManager">
@@ -98,7 +94,9 @@
       <option name="presentableId" value="Default" />
       <updated>1665698490383</updated>
       <workItem from="1665698491928" duration="2207000" />
-      <workItem from="1665709732977" duration="15631000" />
+      <workItem from="1665709732977" duration="15973000" />
+      <workItem from="1665774570201" duration="9000" />
+      <workItem from="1666110079802" duration="15252000" />
     </task>
     <servers />
   </component>
@@ -115,71 +113,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/nyu/edu/DPLLSolver.java</url>
-          <line>45</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/nyu/edu/DPLLSolver.java</url>
-          <line>79</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/nyu/edu/DPLLSolver.java</url>
-          <line>77</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/nyu/edu/DPLLSolver.java</url>
-          <line>59</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/nyu/edu/DPLLSolver.java</url>
-          <line>57</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/nyu/edu/DPLLSolver.java</url>
-          <line>43</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/nyu/edu/DPLLSolver.java</url>
-          <line>32</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/nyu/edu/DPLLSolver.java</url>
-          <line>28</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/nyu/edu/DPLLSolver.java</url>
-          <line>84</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/nyu/edu/DPLLSolver.java</url>
-          <line>27</line>
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/nyu/edu/DPLLSolver.java</url>
-          <line>70</line>
-          <option name="timeStamp" value="14" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/nyu/edu/DPLLSolver.java</url>
-          <line>72</line>
-          <option name="timeStamp" value="15" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
